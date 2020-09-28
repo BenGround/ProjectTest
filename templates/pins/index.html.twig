@@ -4,18 +4,46 @@
 
 {% block body %}
 
-    <h1> {{ pluralize(pins|length, 'Pin', 'Pins') }} </h1>
+    {% if pins|length > 0 %}
 
-    {% for pin in pins %}
+        <h1 class="text-center text-muted mb-4"> {{ pluralize(pins|length, 'Pin', 'Pins') }} </h1>
 
-        <article>
-            <h1>
-                <a href=" {{ path('pin_show', {id: pin.id}) }} "> {{ pin.title }} </a>
-            </h1>
-            <p> {{ pin.description | u.truncate(40, '...', false) }} </p>
-            <p>Submitted {{ pin.createdAt | ago }}</p>
-        </article>
+        {% for row in pins|batch(3) %}
 
-    {% endfor %}
+            <div class="row mb-5">
+
+                {% for pin in row %}
+
+                    <div class="col-md-4">
+                        <article class="pin bg-white rounded shadow">
+
+                            <div class="mw-100 overflow-hidden rounded-top">
+                                <a href=" {{ path('pin_show', {id: pin.id}) }} ">
+                                    <img class="w-100" src="{{ (pin.imageName ? vich_uploader_asset(pin) :
+                                    asset('build/images/placeholder.png'))| imagine_filter('square_medium') }}"
+                                         alt="{{ pin.title }}" />
+                                </a>
+                            </div>
+
+                            <h5 class="pl-3 pt-3">
+                                <a class="text-muted text-decoration-none text-secondary"
+                                   href=" {{ path('pin_show', {id: pin.id}) }} "> {{ pin.title }} </a>
+                            </h5>
+{#                            <p> {{ pin.description | u.truncate(40, '...', false) }} </p>#}
+                            <p class="text-muted pl-3 pb-3"><small>Submitted {{ pin.createdAt | ago }} by {{ pin.user.firstName }}</small></p>
+                        </article>
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p> No pins yet</p>
+
+    {% endif %}
 
 {% endblock %}

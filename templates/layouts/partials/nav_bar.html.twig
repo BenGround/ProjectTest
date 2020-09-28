@@ -4,15 +4,24 @@
 
         <div class="collapse navbar-collapse" id="navbarsExample03">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href=" {{ path('pin_create') }} "> Create a pin </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href=" {{ path('pin_create') }} "> Account </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href=" {{ path('pin_create') }} "> Logout </a>
-                </li>
+                {% if app.user %}
+                    <li class="nav-item">
+                        <a class="nav-link" href=" {{ path('pin_create') }} "> Create a pin </a>
+                    </li>
+{#                    <li class="nav-item">#}
+{#                        <a class="nav-link" href=" {{ path('account') }} "> Account </a>#}
+{#                    </li>#}
+                    <li class="nav-item">
+                        <a class="nav-link" href=" {{ path('logout') }} "> Logout </a>
+                    </li>
+                {% else %}
+{#                    <li class="nav-item">#}
+{#                        <a class="nav-link" href=" {{ path('register') }} "> Register </a>#}
+{#                    </li>#}
+                    <li class="nav-item">
+                        <a class="nav-link" href=" {{ path('login') }} "> Login </a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>
