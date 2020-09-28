@@ -1,0 +1,19 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block title %} {{ pin.title }} {% endblock %}
+
+{% block body %}
+
+    <h1> {{ pin.title }} </h1>
+    <p> {{ pin.description }} </p>
+
+    <a href=" {{ path('pin_edit', {id: pin.id}) }} "> Edit </a><br>
+
+    <a href="#" onclick="event.preventDefault(); confirm('Are you sure ?') && document.getElementById('js-pin-delete-form').submit()"> Delete </a><br>
+
+    <form id="js-pin-delete-form" action="{{ path('pin_delete', {id: pin.id}) }}" method="post" style="display: none">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token('pin' ~ pin.id) }}">
+        <input type="hidden" name="_method" value="DELETE">
+    </form>
+
+{% endblock %}

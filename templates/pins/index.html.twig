@@ -1,0 +1,21 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block title %} Home {% endblock %}
+
+{% block body %}
+
+    <h1> {{ pluralize(pins|length, 'Pin', 'Pins') }} </h1>
+
+    {% for pin in pins %}
+
+        <article>
+            <h1>
+                <a href=" {{ path('pin_show', {id: pin.id}) }} "> {{ pin.title }} </a>
+            </h1>
+            <p> {{ pin.description | u.truncate(40, '...', false) }} </p>
+            <p>Submitted {{ pin.createdAt | ago }}</p>
+        </article>
+
+    {% endfor %}
+
+{% endblock %}

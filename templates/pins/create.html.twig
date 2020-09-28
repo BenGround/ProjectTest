@@ -1,0 +1,21 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block title %} Create Pin {% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+
+            <h1> Create A Pin </h1>
+
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+
+            <input type="submit" class="btn btn-primary btn-block" value="Create a Pin" formnovalidate>
+            {{ form_end(form) }}
+
+        </div>
+    </div>
+
+{% endblock %}

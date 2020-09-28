@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+@import "~bootstrap";
+
+html, body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.footer-style {
+    position: absolute;
+    bottom: 50px;
+    left: 0;
+    right: 0;
+}
+
+section h1 {
+    font-size: 20px;
+}
+
+.alert {
+    padding: 10px;
+    color: white;
+    text-align: center;
+    border-radius: 0;
+
+    &.alert-success {
+        background-color: forestgreen;
+    }
+}
+
+
