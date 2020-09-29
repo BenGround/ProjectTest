@@ -7,11 +7,11 @@ use Twig\TwigFunction;
 
 class AppExtension extends AbstractExtension
 {
-
     public function getFunctions(): array
     {
         return [
             new TwigFunction('pluralize', [$this, 'pluralize']),
+            new TwigFunction('isAdmin', [$this, 'isAdmin'])
         ];
     }
 
@@ -19,4 +19,10 @@ class AppExtension extends AbstractExtension
     {
         return $number == 1 ? $number.' '.$singular : $number.' '.$plural;
     }
+
+    public function isAdmin($user) : bool
+    {
+        return in_array('ROLE_ADMIN', $user->getRoles(), true);
+    }
+
 }

@@ -11,12 +11,14 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class PinsController extends AbstractController
 {
     /**
      * @Route("/", name="home", methods={"GET"})
      * @param PinRepository $pinRepository
+     * @IsGranted("ROLE_USER")
      * @return Response
      */
     public function index(PinRepository $pinRepository)
@@ -53,7 +55,10 @@ class PinsController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $em->persist($form->getData());
+            $pin = $form->getData();
+            $pin->setUser($this->getUser());
+
+            $em->persist($pin);
             $em->flush();
             
             $this->addFlash('success', 'Pin Successfuly Created');
@@ -77,22 +82,30 @@ class PinsController extends AbstractController
     public function edit(Request $request, EntityManagerInterface $em, PinRepository $pinRepository, $id)
     {
         $pin = $pinRepository->find($id);
-        $form = $this->createForm(PinType::class, $pin, ['method' => 'PUT']);
-        $form->handleRequest($request);
+        $user = $this->getUser();
 
-        if($form->isSubmitted() && $form->isValid()) {
-            $em->persist($form->getData());
-            $em->flush();
+        if($pin->getUser() == $user || $user->isAdmin()) {
 
-            $this->addFlash('success', 'Pin Successfuly Updated');
+            $form = $this->createForm(PinType::class, $pin, ['method' => 'PUT']);
+            $form->handleRequest($request);
 
-            return $this->redirectToRoute("home");
+            if($form->isSubmitted() && $form->isValid()) {
+                $em->persist($form->getData());
+                $em->flush();
+
+                $this->addFlash('success', 'Pin Successfuly Updated');
+
+                return $this->redirectToRoute("home");
+            }
+
+            return $this->render('pins/edit.html.twig', [
+                'pin' => $pin,
+                'form' => $form->createView()
+            ]);
         }
 
-        return $this->render('pins/edit.html.twig', [
-            'pin' => $pin,
-            'form' => $form->createView()
-        ]);
+        $this->addFlash('success', 'You are not of owner of this pin');
+        return $this->redirectToRoute("home");
     }
 
     /**
@@ -102,12 +115,18 @@ class PinsController extends AbstractController
      */
     public function delete(Request $request, PinRepository $pinRepository, EntityManagerInterface $em, $id)
     {
-        if($this->isCsrfTokenValid('pin' . $id, $request->request->get("csrf_token"))) {
-            $em->remove($pinRepository->find($id));
-            $em->flush();
-        }
+        $pin = $pinRepository->find($id);
+        $user = $this->getUser();
 
-        $this->addFlash('info', 'Pin Successfuly Deleted');
+        if($pin->getUser() == $user || $user->isAdmin()) {
+            if($this->isCsrfTokenValid('pin' . $id, $request->request->get("csrf_token"))) {
+                $em->remove($pin);
+                $em->flush();
+            }
+            $this->addFlash('info', 'Pin Successfuly Deleted');
+        } else {
+            $this->addFlash('success', 'You are not of owner of this pin');
+        }
 
         return $this->redirectToRoute('home');
     }
