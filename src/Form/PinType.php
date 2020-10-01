@@ -6,7 +6,9 @@ use App\Entity\Pin;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Image;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class PinType extends AbstractType
@@ -25,7 +27,14 @@ class PinType extends AbstractType
                     new Image(['maxSize' => '5M'])
                 ]
             ])
-            ->add('description')
+            ->add('audioFile', VichFileType::class, [
+                'required' => false,
+                'allow_delete' => true,
+                'download_uri' => false,
+                'constraints' => [
+                    new File(['maxSize' => '20M'])
+                ]
+            ]);
         ;
     }
 

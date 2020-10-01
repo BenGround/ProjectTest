@@ -20,8 +20,52 @@
 
         {{ include('layouts/partials/footer.html.twig') }}
 
+        <div class="player row">
+            <div id="waveform" class="col-10"></div>
+            <div class="col-2">
+                <div class="playpause">
+                    <input type="checkbox" value="None" id="playpause" name="check" onclick="playPause()" />
+                    <label for="playpause"></label>
+                </div>
+            </div>
+        </div>
+
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
+
+            <script type="text/javascript">
+
+                var wavesurfer = WaveSurfer.create({
+                    container: '#waveform'
+                });
+
+                wavesurfer.mediaContainer.children[0].style.position = '';
+
+                let temp = null;
+
+                function play(source) {
+                    if(temp && temp === source) {
+                        wavesurfer.play();
+                    } else {
+                        wavesurfer.load(source);
+                        wavesurfer.on('ready', function () {
+                            wavesurfer.play();
+                        });
+                        temp = source;
+                    }
+                }
+
+                function pause() {
+                    wavesurfer.pause();
+                }
+
+                function playPause() {
+                    wavesurfer.playPause();
+                }
+
+            </script>
+
+
         {% endblock %}
     </body>
 

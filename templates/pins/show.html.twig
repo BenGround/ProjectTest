@@ -18,6 +18,12 @@
                     <h2>
                         {{ pin.title }}
                     </h2>
+
+                    <audio controls class="w-100">
+                        <source src="{{ asset(getPinAudio(pin)) }}" type="audio/mpeg">
+                        Your browser does not support this audio format.
+                    </audio>
+
                     {#                            <p> {{ pin.description | u.truncate(40, '...', false) }} </p>#}
                     <p class="text-muted pl-3"><small>Submitted {{ pin.createdAt | ago }} by {{ pin.user.firstName }} {{ pin.user.lastName }}</small></p>
                     <p class="text-break pl-3 pb-3"> {{ pin.description }} </p>
@@ -37,6 +43,5 @@
             </form>
         </div>
     </div>
-
 
 {% endblock %}

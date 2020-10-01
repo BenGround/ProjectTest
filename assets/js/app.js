@@ -11,6 +11,12 @@ import '../scss/app.scss';
 // Need jQuery? Install it with "yarn add jquery", then uncomment to import it.
 import $ from 'jquery';
 import 'bootstrap';
+import wavesurfer from "wavesurfer.js/dist/wavesurfer";
+
+window.jQuery = $;
+window.$ = $;
+window.WaveSurfer = wavesurfer;
+
 
 $('.custom-file-input').on('change', function (e) {
     const inputFile = e.currentTarget;

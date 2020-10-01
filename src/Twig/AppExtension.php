@@ -2,6 +2,7 @@
 
 namespace App\Twig;
 
+use App\Entity\Pin;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -11,7 +12,8 @@ class AppExtension extends AbstractExtension
     {
         return [
             new TwigFunction('pluralize', [$this, 'pluralize']),
-            new TwigFunction('isAdmin', [$this, 'isAdmin'])
+            new TwigFunction('isAdmin', [$this, 'isAdmin']),
+            new TwigFunction('getPinAudio', [$this, 'getPinAudio'])
         ];
     }
 
@@ -25,4 +27,8 @@ class AppExtension extends AbstractExtension
         return in_array('ROLE_ADMIN', $user->getRoles(), true);
     }
 
+    public function getPinAudio(Pin $pin) : string
+    {
+        return 'upload/pin/audio/' . $pin->getAudioName();
+    }
 }

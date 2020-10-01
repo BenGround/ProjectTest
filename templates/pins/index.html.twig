@@ -6,7 +6,7 @@
 
     {% if pins|length > 0 %}
 
-        <h1 class="text-center text-muted mb-4"> {{ pluralize(pins|length, 'Pin', 'Pins') }} </h1>
+        <h1 class="text-center text-muted mb-4"> {{ pluralize(pins|length, 'Track', 'Tracks') }} </h1>
 
         {% for row in pins|batch(3) %}
 
@@ -27,8 +27,15 @@
 
                             <h5 class="pl-3 pt-3">
                                 <a class="text-muted text-decoration-none text-secondary"
-                                   href=" {{ path('pin_show', {id: pin.id}) }} "> {{ pin.title }} </a>
+                                   href=" {{ path('pin_show', {id: pin.id}) }} "> {{ pin.title }}
+                                </a>
                             </h5>
+                            <a class="pl-3" href="#" onclick="play('{{ getPinAudio(pin) }}')">
+                               play
+                            </a>
+                            <a class="pl-3" href="#" onclick="pause()">
+                                pause
+                            </a>
 {#                            <p> {{ pin.description | u.truncate(40, '...', false) }} </p>#}
                             <p class="text-muted pl-3 pb-3"><small>Submitted {{ pin.createdAt | ago }} by {{ pin.user.firstName }}</small></p>
                         </article>
